@@ -22,11 +22,11 @@ import { authFormSchema } from "@/lib/utils";
 import CustomForm from "./CustomForm";
 import { Loader2 } from "lucide-react";
 
-const formSchema = authFormSchema;
-
 const AuthForm = ({ type }: { type: string }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const formSchema = authFormSchema(type);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -69,6 +69,57 @@ const AuthForm = ({ type }: { type: string }) => {
         <>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              {type === "sign-up" && (
+                <>
+                  <div className="flex gap-4">
+                    <CustomForm
+                      control={form.control}
+                      name="firstName"
+                      label="First Name"
+                      placeholder="Enter your first name"
+                    />
+                    <CustomForm
+                      control={form.control}
+                      name="lastName"
+                      label="Last Name"
+                      placeholder="Enter your last name"
+                    />
+                  </div>
+                  <CustomForm
+                    control={form.control}
+                    name="address"
+                    label="Address"
+                    placeholder="Enter your specific address"
+                  />
+                  <CustomForm
+                    control={form.control}
+                    name="city"
+                    label="City"
+                    placeholder="e.g London"
+                  />
+                  <div className="flex gap-4">
+                    <CustomForm
+                      control={form.control}
+                      name="state"
+                      label="State/Province"
+                      placeholder="e.g England"
+                    />
+                    <CustomForm
+                      control={form.control}
+                      name="postalCode"
+                      label="Post Code"
+                      placeholder="e.g N1C 4AG "
+                    />
+                  </div>
+                  <CustomForm
+                    control={form.control}
+                    name="dateOfBirth"
+                    label="Date of Birth"
+                    placeholder="dd-mm-yyyy"
+                  />
+                </>
+              )}
+
               <CustomForm
                 control={form.control}
                 name="email"
@@ -81,18 +132,20 @@ const AuthForm = ({ type }: { type: string }) => {
                 label="Password"
                 placeholder="Enter your Password"
               />
-              <Button className="form-btn" type="submit" disabled={isLoading}>
-                {isLoading ? (
-                  <>
-                    <Loader2 size={20} className="animate-spin" /> &nbsp;
-                    Loading...
-                  </>
-                ) : type === "sign-in" ? (
-                  "Sign In"
-                ) : (
-                  "Sign Up"
-                )}
-              </Button>
+              <div className="flex flex-col gap-4">
+                <Button className="form-btn" type="submit" disabled={isLoading}>
+                  {isLoading ? (
+                    <>
+                      <Loader2 size={20} className="animate-spin" /> &nbsp;
+                      Loading...
+                    </>
+                  ) : type === "sign-in" ? (
+                    "Sign In"
+                  ) : (
+                    "Sign Up"
+                  )}
+                </Button>
+              </div>
             </form>
           </Form>
 
